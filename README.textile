@@ -1,0 +1,5 @@
+IK Analysis for ElasticSearch with Rocket Custom.
+==================================
+
+1. 增加动态增删分词命令: _ik_dict_add & _ik_dict_remove
+   request param: words=word1,word2,word3...
