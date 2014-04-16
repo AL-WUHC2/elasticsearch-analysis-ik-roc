@@ -11,7 +11,7 @@ public abstract class IkDictRequestBuilder extends NodesOperationRequestBuilder<
     }
 
     public IkDictRequestBuilder(ClusterAdminClient clusterClient, String... words) {
-        super((InternalClusterAdminClient) clusterClient, new IkDictRequest(words));
+        super((InternalClusterAdminClient) clusterClient, new IkDictRequest().words(words));
     }
 
     public IkDictRequestBuilder setWords(String... words) {

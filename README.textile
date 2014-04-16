@@ -3,3 +3,5 @@ IK Analysis for ElasticSearch with Rocket Custom.
 
 1. 增加动态增删分词命令: _ik_dict_add & _ik_dict_remove
    request param: words=word1,word2,word3...
+
+2. 动态增删分词后, 自动存储到ik/roc_add.dic和ik/roc_remove.dic文件中, 相同分词的增删操作最多只记录一次.

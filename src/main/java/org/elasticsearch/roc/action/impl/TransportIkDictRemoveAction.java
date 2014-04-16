@@ -1,6 +1,7 @@
 package org.elasticsearch.roc.action.impl;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.cluster.ClusterName;
@@ -29,9 +30,12 @@ public class TransportIkDictRemoveAction extends TransportIkDictAction {
     @Override
     protected IkNodeDictResponse nodeOperation(IkNodeDictRequest request) throws ElasticsearchException {
         String[] words = request.request().words();
-        Dictionary.getSingleton().disableWords(Arrays.asList(words));
         logger.info("[Dict Remove Words] " + Arrays.toString(words));
-        return new IkNodeDictResponse(clusterService.localNode());
+        List<String> removed = Dictionary.getSingleton().disableWords(Arrays.asList(words));
+        String[] array = removed.toArray(new String[removed.size()]);
+        logger.info("[Dict Removed Words] " + Arrays.toString(array));
+        Dictionary.getSingleton().removeRocDict(removed);
+        return new IkNodeDictResponse(clusterService.localNode(), array);
     }
 
 }

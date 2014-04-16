@@ -1,6 +1,6 @@
 package org.elasticsearch.roc.action;
 
-import static org.elasticsearch.roc.utils.Lists.newArrayList;
+import static org.elasticsearch.common.collect.Lists.newArrayList;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReferenceArray;
@@ -60,7 +60,8 @@ public abstract class TransportIkDictAction extends TransportNodesOperationActio
                 ikNodeDictResponses.add((IkDictResponse.IkNodeDictResponse) resp);
             }
         }
-        return new IkDictResponse(clusterName, ikNodeDictResponses.toArray(new IkDictResponse.IkNodeDictResponse[ikNodeDictResponses.size()]));
+        return new IkDictResponse(clusterName, ikNodeDictResponses.toArray(
+                new IkDictResponse.IkNodeDictResponse[ikNodeDictResponses.size()]));
     }
 
     @Override

@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -43,7 +42,7 @@ public class RestIkDictAction extends BaseRestHandler {
         if (words == null || words.length() == 0)
             responseFailed(request, channel, "None word send.");
 
-        IkDictRequest ikRequest = new IkDictRequest(splitParamWords(words));
+        IkDictRequest ikRequest = new IkDictRequest().words(splitParamWords(words));
         IkDictAction action = request.path().equals("/_ik_dict_add") ?
                 IkDictAddAction.INSTANCE : IkDictRemoveAction.INSTANCE;
 
@@ -55,8 +54,7 @@ public class RestIkDictAction extends BaseRestHandler {
                     builder.startObject().startObject("result");
                     IkNodeDictResponse[] nodeResponses = response.getNodes();
                     for (IkNodeDictResponse nodeResponse : nodeResponses) {
-                        DiscoveryNode node = nodeResponse.getNode();
-                        builder.field(node.id(), node.name());
+                        builder.array(nodeResponse.getNode().name(), nodeResponse.words());
                     }
                     builder.endObject().endObject();
                     channel.sendResponse(new XContentRestResponse(request, OK, builder));

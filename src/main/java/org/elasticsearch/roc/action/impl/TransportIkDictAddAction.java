@@ -1,6 +1,7 @@
 package org.elasticsearch.roc.action.impl;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.cluster.ClusterName;
@@ -29,9 +30,12 @@ public class TransportIkDictAddAction extends TransportIkDictAction {
     @Override
     protected IkNodeDictResponse nodeOperation(IkNodeDictRequest request) throws ElasticsearchException {
         String[] words = request.request().words();
-        Dictionary.getSingleton().addWords(Arrays.asList(words));
         logger.info("[Dict Add Words] " + Arrays.toString(words));
-        return new IkNodeDictResponse(clusterService.localNode());
+        List<String> added = Dictionary.getSingleton().addWords(Arrays.asList(words));
+        String[] array = added.toArray(new String[added.size()]);
+        logger.info("[Dict Added Words] " + Arrays.toString(array));
+        Dictionary.getSingleton().addRocDict(added);
+        return new IkNodeDictResponse(clusterService.localNode(), array);
     }
 
 }
